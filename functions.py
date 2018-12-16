@@ -5,7 +5,7 @@ def match(token):
         return 0
     if tokens[i][1] == token:
         i += 1
-        print(token)
+        #print(token)
         return 1
     raise ValueError('token mismatch')
 
@@ -18,15 +18,24 @@ def program():
 def stmt_sequence():
     global i
     global tokens
+    global level
+    level += 1
     statement()
     while i < len(tokens) and tokens[i][1] == ';':
         match(';')
         statement()
+    level -= 1
 
         
 def statement():
     global i
     global tokens
+
+    if tokens[i][1] != 'identifier':
+        print(tokens[i][1], ' level:', level)
+    else:
+        print('assign', ' level:', level)
+
     if tokens[i][1] == 'if':
         if_stmt()
     elif tokens[i][1] == 'repeat':

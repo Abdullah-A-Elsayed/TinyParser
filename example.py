@@ -42,6 +42,8 @@ end, end
 
 tokens = [i.split(', ') for i in text.strip().split('\n')]
 i = 0
+level = 0
 functions.tokens = tokens 
 functions.i = i
+functions.level = level
 program()
