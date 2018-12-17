@@ -1,4 +1,6 @@
 import inspect
+from graphviz import Graph
+from collections import defaultdict
 #inspect.getouterframes(inspect.currentframe(), 2)[1][3]
 
 class Node:
@@ -182,3 +184,30 @@ def factor(parent):
         nodes.append(Node(parent, level, f'id ({tokens[i][0]})'))
         match('identifier')
     return len(nodes)-1
+
+
+def get_shape(label):
+    label = label.split(' ',1)[0]
+    if label in ['read', 'assign', 'if', 'repeat', 'write']:
+        return 'rectangle'
+    return ''
+
+def draw(nodes):
+    nodes_clustered = defaultdict(list)
+    for i,node in enumerate(nodes):
+        nodes_clustered[node.level].append((i,node))
+
+    g = Graph('tree', format = 'png')
+
+    for level, node_list in sorted(nodes_clustered.items()):
+        # print(level)
+        # for node in node_list:
+        #     print(node)
+        with g.subgraph() as s:
+            s.attr(rank = 'same')
+            for data in node_list: s.node(str(data[0]),data[1].text,shape=get_shape(data[1].text))
+
+    for i,node in enumerate(nodes):
+        if i == 0: continue
+        g.edge(str(node.parent), str(i))
+    g.view()
