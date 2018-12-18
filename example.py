@@ -42,8 +42,10 @@ end, end
 
 tokens = [i.split(', ') for i in text.strip().split('\n')]
 i = 0
-level = 0
+nodes = []
 functions.tokens = tokens 
 functions.i = i
-functions.level = level
+functions.nodes = nodes
 program()
+
+draw(functions.nodes)

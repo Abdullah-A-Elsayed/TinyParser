@@ -1,0 +1,56 @@
+graph tree {
+	{
+		rank=same
+		0 [label="read (x)" shape=rectangle]
+		1 [label=if shape=rectangle]
+	}
+	{
+		rank=same
+		3 [label="op (<)" shape=""]
+		5 [label="assign (fact)" shape=rectangle]
+		7 [label=repeat shape=rectangle]
+		18 [label=write shape=rectangle]
+	}
+	{
+		rank=same
+		2 [label="const (0)" shape=""]
+		4 [label="id (x)" shape=""]
+		6 [label="const (1)" shape=""]
+		8 [label="assign (fact)" shape=rectangle]
+		11 [label="assign (x)" shape=rectangle]
+		16 [label="op (=)" shape=""]
+		19 [label="id (fact)" shape=""]
+	}
+	{
+		rank=same
+		10 [label="op (*)" shape=""]
+		13 [label="op (-)" shape=""]
+		15 [label="id (x)" shape=""]
+		17 [label="const (0)" shape=""]
+	}
+	{
+		rank=same
+		9 [label="id (fact)" shape=""]
+		12 [label="id (x)" shape=""]
+		14 [label="const (1)" shape=""]
+	}
+	0 -- 1
+	3 -- 2
+	1 -- 3
+	3 -- 4
+	1 -- 5
+	5 -- 6
+	5 -- 7
+	7 -- 8
+	10 -- 9
+	8 -- 10
+	8 -- 11
+	13 -- 12
+	11 -- 13
+	13 -- 14
+	16 -- 15
+	7 -- 16
+	16 -- 17
+	7 -- 18
+	18 -- 19
+}
