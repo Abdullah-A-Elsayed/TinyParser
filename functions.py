@@ -176,7 +176,6 @@ def term(parent, level):
         nodes[x].level = level + 1
         x = len(nodes) - 1
         mulop()
-        addop()
         factor(x, level + 1)
     return x
 
