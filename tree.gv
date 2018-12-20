@@ -1,4 +1,5 @@
 graph tree {
+	ordering=out
 	{
 		rank=same
 		0 [label="assign (x)" shape=rectangle]

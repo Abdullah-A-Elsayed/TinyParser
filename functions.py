@@ -220,15 +220,15 @@ def draw(nodes):
     for i, node in enumerate(nodes):
         nodes_clustered[node.level].append((i,node))
 
-    g = Graph('tree', format = 'png')
-
+    g = Graph('tree', format='png')
+    g.attr(ordering="out")
     for level, node_list in sorted(nodes_clustered.items()):
         # print(level)
         # for node in node_list:
         #     print(node)
         with g.subgraph() as s:
             s.attr(rank='same')
-            for data in node_list: s.node(str(data[0]),data[1].text,shape=get_shape(data[1].text))
+            for data in node_list: s.node(str(data[0]), data[1].text,shape=get_shape(data[1].text))
 
     for i, node in enumerate(nodes):
         if i == 0: continue
