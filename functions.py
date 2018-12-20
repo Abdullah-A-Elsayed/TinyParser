@@ -5,13 +5,29 @@ from collections import defaultdict
 
 
 class Node:
-    def __init__(self, parent, level, text):
+    def __init__(self, parent, level, text, nodes):
         self.parent = parent
         self.level = level
         self.text = text
+        self.children = []
+        if parent > -1:
+            nodes[parent].children.append(self)
 
     def __str__(self):
         return self.text
+
+    def inc_level(self):
+        self.level += 1
+        if len(self.children) == 0: return
+        for x in self.children:
+            x.inc_level()
+
+    def chg_parent(self, new):
+        if self.parent > -1:
+            nodes[self.parent].children.remove(self)
+        self.parent = new
+        if new > -1:
+            nodes[new].children.append(self)
 
 
 def match(token):
@@ -21,9 +37,8 @@ def match(token):
         return 0
     if tokens[i][1] == token:
         i += 1
-        # print(token)
         return 1
-    raise ValueError('token mismatch')
+    raise ValueError(f'token mismatch expected({token} but found({tokens[i][1]})')
 
 
 def program():
@@ -34,25 +49,17 @@ def program():
 def stmt_sequence(parent, level):
     global i
     global tokens
-    # level += 1
     x = statement(parent, level)
     y = x
     while i < len(tokens) and tokens[i][1] == ';':
         match(';')
         x = statement(x, level)
-    # level -= 1
     return y
 
 
 def statement(parent, level):
     global i
     global tokens
-
-    # if tokens[i][1] != 'identifier':
-    #    print(tokens[i][1], ' level:', level)
-    # else:
-    #    print('assign', ' level:', level)
-
     if tokens[i][1] == 'if':
         return if_stmt(parent, level)
     elif tokens[i][1] == 'repeat':
@@ -70,7 +77,7 @@ def statement(parent, level):
 def if_stmt(parent, level):
     global i
     global tokens
-    nodes.append(Node(parent, level, 'if'))
+    nodes.append(Node(parent, level, 'if', nodes))
     level += 1
     x = len(nodes) - 1
     match('if')
@@ -78,7 +85,7 @@ def if_stmt(parent, level):
     match('then')
     stmt_sequence(x, level)
     if i < len(tokens) and tokens[i][1] == 'else':
-        nodes.append(Node(parent, level, 'else'))
+        nodes.append(Node(parent, level, 'else', nodes))
         y = len(nodes) - 1
         match('else')
         stmt_sequence(y, level)
@@ -89,7 +96,7 @@ def if_stmt(parent, level):
 def repeat_stmt(parent, level):
     global i
     global tokens
-    nodes.append(Node(parent, level, 'repeat'))
+    nodes.append(Node(parent, level, 'repeat', nodes))
     level += 1
     match('repeat')
     x = len(nodes) - 1
@@ -102,7 +109,7 @@ def repeat_stmt(parent, level):
 def assign_stmt(parent, level):
     global i
     global tokens
-    nodes.append(Node(parent, level, f'assign ({tokens[i][0]})'))
+    nodes.append(Node(parent, level, f'assign ({tokens[i][0]})', nodes))
     x = len(nodes) - 1
     match('identifier')
     match(':=')
@@ -114,7 +121,7 @@ def read_stmt(parent, level):
     global i
     global tokens
     match('read')
-    nodes.append(Node(parent, level, f'read ({tokens[i][0]})'))
+    nodes.append(Node(parent, level, f'read ({tokens[i][0]})', nodes))
     match('identifier')
     x = len(nodes) - 1
     return x
@@ -124,7 +131,7 @@ def write_stmt(parent, level):
     global i
     global tokens
     match('write')
-    nodes.append(Node(parent, level, 'write'))
+    nodes.append(Node(parent, level, 'write', nodes))
     x = len(nodes) - 1
     exp(x, level + 1)
     return x
@@ -135,9 +142,9 @@ def exp(parent, level):
     global tokens
     x = simple_exp(parent, level)
     if i < len(tokens) and (tokens[i][1] == '<' or tokens[i][1] == '='):
-        nodes.append(Node(parent, level, f'op ({tokens[i][0]})'))
-        nodes[x].parent = len(nodes) - 1
-        nodes[x].level = level + 1
+        nodes.append(Node(parent, level, f'op ({tokens[i][0]})', nodes))
+        nodes[x].chg_parent(len(nodes) - 1)
+        nodes[x].inc_level()
         x = len(nodes) - 1
         comparison_op()
         simple_exp(x, level + 1)
@@ -153,9 +160,9 @@ def simple_exp(parent, level):
     global tokens
     x = term(parent, level)
     while i < len(tokens) and (tokens[i][1] == '+' or tokens[i][1] == '-'):
-        nodes.append(Node(parent, level, f'op ({tokens[i][0]})'))
-        nodes[x].parent = len(nodes) - 1
-        nodes[x].level = level + 1
+        nodes.append(Node(parent, level, f'op ({tokens[i][0]})', nodes))
+        nodes[x].chg_parent(len(nodes) - 1)
+        nodes[x].inc_level()
         x = len(nodes) - 1
         addop()
         term(x, level + 1)
@@ -171,9 +178,9 @@ def term(parent, level):
     global tokens
     x = factor(parent, level)
     while i < len(tokens) and (tokens[i][1] == '*' or tokens[i][1] == '/'):
-        nodes.append(Node(parent, level, f'op ({tokens[i][0]})'))
-        nodes[x].parent = len(nodes) - 1
-        nodes[x].level = level + 1
+        nodes.append(Node(parent, level, f'op ({tokens[i][0]})', nodes))
+        nodes[x].chg_parent(len(nodes) - 1)
+        nodes[x].inc_level()
         x = len(nodes) - 1
         mulop()
         factor(x, level + 1)
@@ -193,19 +200,20 @@ def factor(parent, level):
         match(')')
         return x
     elif tokens[i][1] == 'number':
-        nodes.append(Node(parent, level, f'const ({tokens[i][0]})'))
+        nodes.append(Node(parent, level, f'const ({tokens[i][0]})', nodes))
         match('number')
     elif tokens[i][1] == 'identifier':
-        nodes.append(Node(parent, level, f'id ({tokens[i][0]})'))
+        nodes.append(Node(parent, level, f'id ({tokens[i][0]})', nodes))
         match('identifier')
     return len(nodes) - 1
 
 
 def get_shape(label):
-    label = label.split(' ',1)[0]
+    label = label.split(' ', 1)[0]
     if label in ['read', 'assign', 'if', 'repeat', 'write']:
         return 'rectangle'
     return ''
+
 
 def draw(nodes):
     nodes_clustered = defaultdict(list)
@@ -219,7 +227,7 @@ def draw(nodes):
         # for node in node_list:
         #     print(node)
         with g.subgraph() as s:
-            s.attr(rank = 'same')
+            s.attr(rank='same')
             for data in node_list: s.node(str(data[0]),data[1].text,shape=get_shape(data[1].text))
 
     for i, node in enumerate(nodes):
