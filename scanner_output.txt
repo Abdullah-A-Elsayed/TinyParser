@@ -2,11 +2,9 @@ read, read
 x, identifier
 ;, ;
 if, if
-(, (
 0, number
 <, <
 x, identifier
-), )
 then, then
 fact, identifier
 :=, :=

@@ -227,7 +227,7 @@ def draw(nodes):
         # for node in node_list:
         #     print(node)
         with g.subgraph() as s:
-            s.attr(rank='same')
+            s.attr(rank='same',rankdir='LR')
             for data in node_list: s.node(str(data[0]), data[1].text,shape=get_shape(data[1].text))
 
     for i, node in enumerate(nodes):
