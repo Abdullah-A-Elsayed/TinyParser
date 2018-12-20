@@ -17,6 +17,8 @@ graph tree {
 		14 [label="op (<)" shape=""]
 		16 [label=repeat shape=rectangle]
 		28 [label=write shape=rectangle]
+		30 [label="read (b)" shape=rectangle]
+		31 [label=if shape=rectangle]
 	}
 	{
 		rank=same
@@ -28,6 +30,9 @@ graph tree {
 		21 [label="assign (z)" shape=rectangle]
 		26 [label="op (=)" shape=""]
 		29 [label="id (a)" shape=""]
+		33 [label="op (=)" shape=""]
+		35 [label=write shape=rectangle]
+		41 [label=write shape=rectangle]
 	}
 	{
 		rank=same
@@ -37,6 +42,10 @@ graph tree {
 		23 [label="op (-)" shape=""]
 		25 [label="id (z)" shape=""]
 		27 [label="const (0)" shape=""]
+		32 [label="id (b)" shape=""]
+		34 [label="const (-1)" shape=""]
+		37 [label="op (*)" shape=""]
+		42 [label="id (a)" shape=""]
 	}
 	{
 		rank=same
@@ -44,6 +53,13 @@ graph tree {
 		20 [label="const (2)" shape=""]
 		22 [label="id (z)" shape=""]
 		24 [label="const (1)" shape=""]
+		36 [label="id (b)" shape=""]
+		39 [label="op (-)" shape=""]
+	}
+	{
+		rank=same
+		38 [label="id (x)" shape=""]
+		40 [label="id (y)" shape=""]
 	}
 	0 -- 1
 	0 -- 2
@@ -74,4 +90,17 @@ graph tree {
 	26 -- 27
 	16 -- 28
 	28 -- 29
+	12 -- 30
+	30 -- 31
+	33 -- 32
+	31 -- 33
+	33 -- 34
+	31 -- 35
+	37 -- 36
+	35 -- 37
+	39 -- 38
+	37 -- 39
+	39 -- 40
+	31 -- 41
+	41 -- 42
 }

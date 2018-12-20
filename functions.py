@@ -85,10 +85,10 @@ def if_stmt(parent, level):
     match('then')
     stmt_sequence(x, level)
     if i < len(tokens) and tokens[i][1] == 'else':
-        nodes.append(Node(parent, level, 'else', nodes))
-        y = len(nodes) - 1
+        #nodes.append(Node(x, level, 'else', nodes))
+        #y = len(nodes) - 1
         match('else')
-        stmt_sequence(y, level)
+        stmt_sequence(x, level)
     match('end')
     return x
 
