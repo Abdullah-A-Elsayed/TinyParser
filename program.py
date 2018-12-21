@@ -10,18 +10,17 @@ import parser_functions
 from parser_functions import *
 
 import os
-os.environ["PATH"] += os.pathsep + r'C:\Program Files\Graphviz2.38\bin'
-os.environ["PATH"] += os.pathsep + r'C:\Program Files (x86)\Graphviz2.38\bin'
-    
+os.environ["PATH"] += os.pathsep + os.getcwd() + '/inc'
+
 root = Tk()
 root.title("Tiny Scanner & Parser")
-root.iconbitmap('icon.ico')
+root.iconbitmap('inc/icon.ico')
 #root.geometry("500x500")
 root.resizable(width=True,height=True)
-img = PhotoImage(file="btn.png") ##import
+img = PhotoImage(file="inc/btn.png") ##import
 ##img = img.zoom(3)
 ##img = img.subsample(12)
-cnv = PhotoImage(file="convert.png")
+cnv = PhotoImage(file="inc/convert.png")
 ##cnv = cnv.subsample(5)
 output_file = 'scanner_output.txt'
 
