@@ -22,6 +22,25 @@ cnv = PhotoImage(file="convert.png")
 ##cnv = cnv.subsample(5)
 output_file = 'scanner_output.txt'
 
+initial = '''x:= 2;
+y:= 3;
+z:= 5;
+a:= x + y + z;
+if z < 8 then
+	repeat
+		a:= a*2;
+		z:= z-1
+	until z = 0;
+	write a
+else
+	read b;
+	if b=1 then
+		write b*(x-y)
+	else
+		write a
+	end
+end
+write z'''
 
 
 
@@ -46,7 +65,7 @@ def read_out():
     root.after(40,read_out) ##get output_file
     
 
-    
+
 def ask_open_file(event):
     filename = askopenfilename(parent=root,filetypes=[("Text files","*.txt")])
     input_f = open(filename,'r')
@@ -135,7 +154,6 @@ def read_Entry(event):
         parser_functions.i = i
         parser_functions.nodes = nodes
         program()
-
         draw(parser_functions.nodes)
         # ======================
     
@@ -155,6 +173,7 @@ upper_part.pack(expand=1)
 #upper_part_done
 mid_part = Frame(left_half)
 entry = Text(mid_part,width=40,height=15,background="#d9fcf1")##height
+entry.insert(END, initial)
 entry.pack(side=LEFT, fill = Y,expand=1) #pack
 entry.config(undo=True)
 scroll = Scrollbar(mid_part,command=entry.yview)

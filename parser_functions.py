@@ -1,6 +1,7 @@
 #import inspect
 from graphviz import Graph
 from collections import defaultdict
+from tkinter.messagebox import showerror
 #inspect.getouterframes(inspect.currentframe(), 2)[1][3]
 
 
@@ -34,11 +35,15 @@ def match(token):
     global i
     global tokens
     if i >= len(tokens):
-        return 0
+        showerror(title="syntax Error", message=f'expected "{token}" but found nothing')
+        raise
+        #raise ValueError(f'syntax Error expected "{token}" but found nothing')
     if tokens[i][1] == token:
         i += 1
         return 1
-    raise ValueError(f'token mismatch expected({token} but found({tokens[i][1]})')
+    showerror(title="token mismatch", message=f'expected "{token}" but found "{tokens[i][1]}"')
+    raise
+    #raise ValueError(f'token mismatch expected "{token}" but found "{tokens[i][1]}"')
 
 
 def program():
@@ -60,6 +65,8 @@ def stmt_sequence(parent, level):
 def statement(parent, level):
     global i
     global tokens
+    if i >= len(tokens):
+        match('statement')
     if tokens[i][1] == 'if':
         return if_stmt(parent, level)
     elif tokens[i][1] == 'repeat':
@@ -71,7 +78,7 @@ def statement(parent, level):
     elif tokens[i][1] == 'write':
         return write_stmt(parent, level)
     else:
-        raise ValueError('token mismatch')
+        match('statement')
 
 
 def if_stmt(parent, level):
@@ -227,7 +234,7 @@ def draw(nodes):
         # for node in node_list:
         #     print(node)
         with g.subgraph() as s:
-            s.attr(rank='same',rankdir='LR')
+            s.attr(rank='same')
             for data in node_list: s.node(str(data[0]), data[1].text,shape=get_shape(data[1].text))
 
     for i, node in enumerate(nodes):
