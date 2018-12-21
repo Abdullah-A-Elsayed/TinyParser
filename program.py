@@ -39,7 +39,7 @@ else
 	else
 		write a
 	end
-end
+end;
 write z'''
 
 

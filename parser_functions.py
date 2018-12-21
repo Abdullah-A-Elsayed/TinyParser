@@ -36,18 +36,18 @@ def match(token):
     global tokens
     if i >= len(tokens):
         showerror(title="syntax Error", message=f'expected "{token}" but found nothing')
-        raise
         #raise ValueError(f'syntax Error expected "{token}" but found nothing')
     if tokens[i][1] == token:
         i += 1
         return 1
     showerror(title="token mismatch", message=f'expected "{token}" but found "{tokens[i][1]}"')
-    raise
     #raise ValueError(f'token mismatch expected "{token}" but found "{tokens[i][1]}"')
 
 
 def program():
     stmt_sequence(-1, 0)
+    if i < len(tokens):
+        match(';')
     print('compiled successfully')
 
 
@@ -229,6 +229,7 @@ def draw(nodes):
 
     g = Graph('tree', format='png')
     g.attr(ordering="out")
+    g.attr(nodesep='0.5;')
     for level, node_list in sorted(nodes_clustered.items()):
         # print(level)
         # for node in node_list:
