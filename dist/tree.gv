@@ -8,6 +8,7 @@ graph tree {
 		4 [label="assign (z)" shape=rectangle]
 		6 [label="assign (a)" shape=rectangle]
 		12 [label=if shape=rectangle]
+		43 [label=write shape=rectangle]
 	}
 	{
 		rank=same
@@ -20,6 +21,7 @@ graph tree {
 		28 [label=write shape=rectangle]
 		30 [label="read (b)" shape=rectangle]
 		31 [label=if shape=rectangle]
+		44 [label="id (z)" shape=""]
 	}
 	{
 		rank=same
@@ -104,4 +106,6 @@ graph tree {
 	39 -- 40
 	31 -- 41
 	41 -- 42
+	12 -- 43
+	43 -- 44
 }

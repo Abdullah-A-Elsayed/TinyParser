@@ -64,5 +64,6 @@ write, write
 a, identifier
 end, end
 end, end
+;, ;
 write, write
 z, identifier

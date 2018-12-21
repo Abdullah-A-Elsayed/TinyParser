@@ -9,7 +9,10 @@ from tkinter.filedialog import askopenfilename
 import parser_functions
 from parser_functions import *
 
-
+import os
+os.environ["PATH"] += os.pathsep + r'C:\Program Files\Graphviz2.38\bin'
+os.environ["PATH"] += os.pathsep + r'C:\Program Files (x86)\Graphviz2.38\bin'
+    
 root = Tk()
 root.title("Tiny Scanner & Parser")
 root.iconbitmap('icon.ico')
