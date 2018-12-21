@@ -46,7 +46,7 @@ def match(token):
 
 def program():
     stmt_sequence(-1, 0)
-    if i < len(tokens):
+    if i < len(tokens):     # for error handling
         match(';')
     print('compiled successfully')
 
@@ -65,7 +65,7 @@ def stmt_sequence(parent, level):
 def statement(parent, level):
     global i
     global tokens
-    if i >= len(tokens):
+    if i >= len(tokens):         # for error handling
         match('statement')
     if tokens[i][1] == 'if':
         return if_stmt(parent, level)
@@ -77,7 +77,7 @@ def statement(parent, level):
         return read_stmt(parent, level)
     elif tokens[i][1] == 'write':
         return write_stmt(parent, level)
-    else:
+    else:                       # for error handling
         match('statement')
 
 
